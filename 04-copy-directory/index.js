@@ -5,14 +5,11 @@ const { unlink, mkdir, copyFile } = require('fs/promises');
 const pathForDir = path.join(__dirname, 'files');
 const pathForNewDir = path.join(__dirname, 'files-copy');
 
-
 fs.readdir(pathForDir, {withFileTypes: true}, (err, data) => {
   if (err) throw err;
   mkdir(pathForNewDir, { recursive: true });
   
   data.forEach(element => {
-
-      
     copyFile(path.join(pathForDir, element.name), path.join(pathForNewDir, element.name));
   });
 });
