@@ -14,13 +14,18 @@ fs.readdir(pathForDir, {withFileTypes: true}, (err, data) => {
   });
 });
 
-fs.readdir(pathForNewDir, {withFileTypes: true}, (err, data) => {
-  if (err) throw err;
-  data.forEach(element => {
-    fs.stat(path.join(pathForDir, `${element.name}`), (err, stats) => {
-      if (stats === undefined) unlink(path.join(pathForNewDir, `${element.name}`));
-    });
-  });
+fs.access(pathForNewDir, fs.constants.F_OK, (err) => {
+  if (!err) {
+    fs.readdir(pathForNewDir, {withFileTypes: true}, (err, data) => {
+      if (err) throw err;
+      data.forEach(element => {
+        fs.stat(path.join(pathForDir, `${element.name}`), (err, stats) => {
+          if (stats === undefined) unlink(path.join(pathForNewDir, `${element.name}`));
+        });
+      });
+    });  
+  }
 });
+
 
 console.log('Файлы скопированы');
